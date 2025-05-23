@@ -2,9 +2,10 @@ from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from ..models import db, Club, Membership
 
+
 memberships_bp = Blueprint('memberships', __name__, url_prefix='/clubs/<int:club_id>/memberships')
 
-@memberships_bp.route('', methods=['GET'])
+@memberships_bp.route('', methods=['GET'], endpoint='join_club')
 @jwt_required
 def join_club(club_id):
     user_id = get_jwt_identity()
@@ -17,7 +18,7 @@ def join_club(club_id):
     return jsonify(m.serialize()), 201
 
 
-@memberships_bp.route('/<int:membership_id>', methods=['DELETE'])
+@memberships_bp.route('/<int:membership_id>', methods=['DELETE'], endpoint='leave_club')
 @jwt_required
 def leave_club(club_id, membership_id):
     m = Membership.query.get_or_404(membership_id)
@@ -27,7 +28,7 @@ def leave_club(club_id, membership_id):
     db.session.commit()
     return 'deleted', 204
 
-@memberships_bp.route('/<int:membership_id>', methods=['PATCH'])
+@memberships_bp.route('/<int:membership_id>', methods=['PATCH'], endpoint='update_membership_role')
 @jwt_required
 def update_role(club_id, membership_id):
     m = Membership.query.get_or_404(membership_id)

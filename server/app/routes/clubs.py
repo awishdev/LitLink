@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
+
 from ..models import db, Club
 
 clubs_bp = Blueprint('clubs', __name__)
@@ -31,7 +32,7 @@ def get_club(club_id):
     club = Club.query.get_or_404(club_id)
     return jsonify(club.serialize()), 200
 
-@clubs_bp.route('/clubs/<int:club_id>', methods=['PATCH'])
+@clubs_bp.route('/clubs/<int:club_id>', methods=['PATCH'], endpoint='update_club')
 @jwt_required
 def update_club(club_id):
     club = Club.query.get_or_404(club_id)
@@ -42,7 +43,7 @@ def update_club(club_id):
     return jsonify(club.serialize()), 200
 
 
-@clubs_bp.route('/clubs/<int:club_id>', methods=['DELETE'])
+@clubs_bp.route('/clubs/<int:club_id>', methods=['DELETE'], endpoint='delete_club')
 @jwt_required
 def delete_club(club_id):
     club = Club.query.get_or_404(club_id)

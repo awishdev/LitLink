@@ -4,12 +4,12 @@ from ..models import db, Club, Meeting
 
 meetings_bp = Blueprint('meetings', __name__, url_prefix='/api')
 
-@meetings_bp.route('/clubs/<int:club_id>/meetings', methods=['GET'])
+@meetings_bp.route('/clubs/<int:club_id>/meetings', methods=['GET'], endpoint='list_meetings')
 def list_meetings(club_id):
     club = Club.query.get_or_404(club_id)
     return jsonify([m.serialize() for m in club.meetings]), 200
 
-@meetings_bp.route('/clubs/<int:club_id>/meetings', methods=['POST'])
+@meetings_bp.route('/clubs/<int:club_id>/meetings', methods=['POST'], endpoint='create_meeting')
 @jwt_required
 def create_meeting(club_id):
     data = request.get_json()
@@ -18,7 +18,7 @@ def create_meeting(club_id):
     db.session.commit()
     return jsonify(m.serialize()), 201
 
-@meetings_bp.route('/meetings/<int:meeting_id>', methods=['PATCH'])
+@meetings_bp.route('/meetings/<int:meeting_id>', methods=['PATCH'], endpoint='update_meeting')
 @jwt_required
 def update_meeting(meeting_id):
     m = Meeting.query.get_or_404(meeting_id)
@@ -28,7 +28,7 @@ def update_meeting(meeting_id):
     db.session.commit()
     return jsonify(m.serialize()), 200
 
-@meetings_bp.route('/meetings/<int:meeting_id>', methods=['DELETE'])
+@meetings_bp.route('/meetings/<int:meeting_id>', methods=['DELETE'], endpoint='delete_meeting')
 @jwt_required
 def delete_meeting(meeting_id):
     m = Meeting.query.get_or_404(meeting_id)
