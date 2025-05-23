@@ -10,8 +10,6 @@ from .routes.meetings import meetings_bp
 from .routes.club_comments import club_comments_bp
 from .routes.meeting_comments import meeting_comments_bp
 from .routes.recommendations import rec_bp
-from .routes.books import books_bp
-
 
 def create_app():
     app = Flask(__name__)
@@ -28,7 +26,5 @@ def create_app():
     app.register_blueprint(club_comments_bp)
     app.register_blueprint(meeting_comments_bp)
     app.register_blueprint(rec_bp)
-    app.register_blueprint(books_bp)
-
 
     return app
