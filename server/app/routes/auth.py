@@ -3,7 +3,7 @@ from flask_jwt_extended import create_access_token
 from ..models import db, User
 from werkzeug.security import generate_password_hash, check_password_hash
 
-auth_bp = Blueprint('auth', __name__)
+auth_bp = Blueprint('auth', __name__, url_prefix='/api/auth')
 
 @auth_bp.route('/register', methods=['POST'])
 def register():

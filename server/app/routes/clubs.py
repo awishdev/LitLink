@@ -3,11 +3,11 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from ..models import db, Club
 
-clubs_bp = Blueprint('clubs', __name__)
+clubs_bp = Blueprint('clubs', __name__, url_prefix='/api/clubs')
 
-@clubs_bp.route('/clubs', methods=['GET'])
+@clubs_bp.route('', methods=['GET'])
 def list_clubs():
-    q = request.args.get('search')
+    q = request.args.get('search', '')
     query = Club.query
 
     if q:
@@ -17,7 +17,7 @@ def list_clubs():
     return jsonify([club.serialize() for club in clubs]), 200
 
 
-@clubs_bp.route('/clubs', methods=['POST'])
+@clubs_bp.route('', methods=['POST'])
 @jwt_required
 def create_club():
     data = request.get_json()
@@ -27,12 +27,12 @@ def create_club():
     return jsonify(club.serialize()), 201
 
 
-@clubs_bp.route('/clubs/<int:club_id>', methods=['GET'])
+@clubs_bp.route('/<int:club_id>', methods=['GET'])
 def get_club(club_id):
     club = Club.query.get_or_404(club_id)
     return jsonify(club.serialize()), 200
 
-@clubs_bp.route('/clubs/<int:club_id>', methods=['PATCH'], endpoint='update_club')
+@clubs_bp.route('/<int:club_id>', methods=['PATCH'], endpoint='update_club')
 @jwt_required
 def update_club(club_id):
     club = Club.query.get_or_404(club_id)
@@ -43,7 +43,7 @@ def update_club(club_id):
     return jsonify(club.serialize()), 200
 
 
-@clubs_bp.route('/clubs/<int:club_id>', methods=['DELETE'], endpoint='delete_club')
+@clubs_bp.route('/<int:club_id>', methods=['DELETE'], endpoint='delete_club')
 @jwt_required
 def delete_club(club_id):
     club = Club.query.get_or_404(club_id)

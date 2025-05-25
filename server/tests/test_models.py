@@ -1,4 +1,5 @@
 import pytest
+import os
 from app.models import User, Club, Membership, ClubComment
 
 def test_user_membership_relationship(db):
