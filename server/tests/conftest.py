@@ -39,5 +39,16 @@ def client(app):
 
 @pytest.fixture
 def db(app):
-    """Expose the database for direct model tests."""
+    #"""Expose the database for direct model tests."""
     return _db
+
+@pytest.fixture(autouse=True)
+def clean_db(app, db):
+    #"""Ensure a fresh schema before each test."""
+    with app.app_context():
+        db.drop_all()
+        db.create_all()
+    yield
+    with app.app_context():
+        db.session.remove()
+        db.drop_all()

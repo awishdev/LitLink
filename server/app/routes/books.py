@@ -1,6 +1,7 @@
 import os
 import requests
 from flask import Blueprint, request, jsonify
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 books_bp = Blueprint('books', __name__, url_prefix='/api/books')
 

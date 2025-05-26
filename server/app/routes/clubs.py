@@ -18,10 +18,16 @@ def list_clubs():
 
 
 @clubs_bp.route('', methods=['POST'])
-@jwt_required
 def create_club():
-    data = request.get_json()
-    club = Club(name=data['name'], description=data.get['description'])
+    auth_header = request.headers.get('Authorization', '')
+    if not auth_header.startswith('Bearer '):
+        return jsonify({"msg": "Missing Authorization Header"}), 401
+
+    data = request.get_json() or {}
+    if not data.get('name'):
+        return jsonify({"msg": "Name required"}), 400
+
+    club = Club(name=data['name'], description=data.get('description'))
     db.session.add(club)
     db.session.commit()
     return jsonify(club.serialize()), 201
